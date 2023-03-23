@@ -4,22 +4,43 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Data.SqlClient;
 
 namespace web_api.Controllers
 {
     public class PacientesController : ApiController
     {
         // GET: api/Pacientes
-        public List<Models.Paciente> Get() {
-            Models.Paciente p1 = new Models.Paciente();
-            p1.Nome = "marcelo";
+        public List<Models.Paciente> Get()
+        {
+            List < Models.Paciente > pacientes = new List<Models.Paciente>();
 
-            Models.Paciente p2 = new Models.Paciente();
-            p2.Nome = "ronery";
+            string connectionString = @"Server=GLADOS_NOTE\SQLEXPRESS;Database=consultorio;Trusted_Connection=True;";
 
-            List<Models.Paciente> pacientes = new List<Models.Paciente>();
-            pacientes.Add(p1);
-            pacientes.Add(p2);
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open(); // abre a conexão com o SGBD
+
+                
+
+                using(SqlCommand cmd = new SqlCommand())
+                {
+                    cmd.Connection = conn;
+                    cmd.CommandText = "select codigo, nome, email from paciente;";
+
+                    SqlDataReader dr =  cmd.ExecuteReader();
+
+                    while(dr.Read())
+                    {
+                        Models.Paciente paciente = new Models.Paciente();
+                        paciente.Codigo = (int) dr["codigo"];
+                        paciente.Nome = (string) dr["nome"];
+                        paciente.Email = (string) dr["email"];
+                        pacientes.Add(paciente);
+                    }
+
+                }
+            }
 
             return pacientes;
         }
@@ -31,12 +52,12 @@ namespace web_api.Controllers
         }
 
         // POST: api/Pacientes
-        public void Post([FromBody]string value)
+        public void Post([FromBody] string value)
         {
         }
 
         // PUT: api/Pacientes/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody] string value)
         {
         }
 

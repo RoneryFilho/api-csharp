@@ -6,7 +6,7 @@ using System.Web;
 namespace web_api.Models {
     public class Paciente {
 
-        public int Codigo { get; }
+        public int Codigo { get; set; }
 
         public string Nome { get; set; }
 
