@@ -15,7 +15,7 @@ namespace web_api.Controllers
         {
             List<Models.Medico> medicos = new List<Models.Medico>();
 
-            string connectionString = @"Server=GLADOS_NOTE\SQLEXPRESS;Database=consultorio;Trusted_Connection=True;";
+            string connectionString = Configurations.SQLServer.getConnectionString();
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -57,8 +57,23 @@ namespace web_api.Controllers
         }
 
         // POST: api/Medicos
-        public void Post([FromBody]string value)
+        public void Post(Models.Medico medico)
         {
+            using(SqlConnection conn = new SqlConnection())
+            {
+                conn.ConnectionString = Configurations.SQLServer.getConnectionString();
+                conn.Open();
+
+                using (SqlCommand cmd = new SqlCommand())
+                {
+                    cmd.Connection = conn;
+                    cmd.CommandText = "insert into medico (nome,datanascimento, crm) values (@nome, @datanascimento, @crm)";
+                    cmd.Parameters.Add(new SqlParameter("@nome",System.Data.SqlDbType.VarChar, 200)).Value = medico.Nome;
+                    cmd.Parameters.Add(new SqlParameter("@datanascimento", System.Data.SqlDbType.Date)).Value = medico.DataNascimento;
+                    cmd.Parameters.Add(new SqlParameter("@crm", System.Data.SqlDbType.Char,3)).Value = medico.Crm;
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
 
         // PUT: api/Medicos/5
