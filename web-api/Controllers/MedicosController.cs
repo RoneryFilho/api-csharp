@@ -70,7 +70,7 @@ namespace web_api.Controllers
                     cmd.CommandText = "insert into medico (nome,datanascimento, crm) values (@nome, @datanascimento, @crm)";
                     cmd.Parameters.Add(new SqlParameter("@nome",System.Data.SqlDbType.VarChar, 200)).Value = medico.Nome;
                     cmd.Parameters.Add(new SqlParameter("@datanascimento", System.Data.SqlDbType.Date)).Value = medico.DataNascimento;
-                    cmd.Parameters.Add(new SqlParameter("@crm", System.Data.SqlDbType.Char,3)).Value = medico.Crm;
+                    cmd.Parameters.Add(new SqlParameter("@crm", System.Data.SqlDbType.Char,9)).Value = medico.Crm;
                     cmd.ExecuteNonQuery();
                 }
             }
