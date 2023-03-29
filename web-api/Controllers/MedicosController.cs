@@ -57,7 +57,7 @@ namespace web_api.Controllers
         }
 
         // POST: api/Medicos
-        public void Post(Models.Medico medico)
+        public IHttpActionResult Post(Models.Medico medico)
         {
             using(SqlConnection conn = new SqlConnection())
             {
@@ -67,18 +67,21 @@ namespace web_api.Controllers
                 using (SqlCommand cmd = new SqlCommand())
                 {
                     cmd.Connection = conn;
-                    cmd.CommandText = "insert into medico (nome,datanascimento, crm) values (@nome, @datanascimento, @crm)";
+                    cmd.CommandText = "insert into medico (nome,datanascimento, crm) values (@nome, @datanascimento, @crm); select convert(int,@@identity) as codigo;";//convert para garantir que o identity é mesmo um inteiro
                     cmd.Parameters.Add(new SqlParameter("@nome",System.Data.SqlDbType.VarChar, 200)).Value = medico.Nome;
                     cmd.Parameters.Add(new SqlParameter("@datanascimento", System.Data.SqlDbType.Date)).Value = medico.DataNascimento;
                     cmd.Parameters.Add(new SqlParameter("@crm", System.Data.SqlDbType.Char,9)).Value = medico.Crm;
-                    cmd.ExecuteNonQuery();
+
+                    medico.Codigo = (int) cmd.ExecuteScalar();
                 }
             }
+            return Ok(medico);
         }
 
         // PUT: api/Medicos/5
         public void Put(int id, [FromBody]string value)
         {
+           
         }
 
         // DELETE: api/Medicos/5
