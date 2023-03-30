@@ -7,13 +7,16 @@ using System.Web.Http;
 using System.Data.SqlClient;
 using System.Configuration;
 using web_api.Models;
+using System.IO;
+using System.Text;
+using web_api.Configurations;
 
 namespace web_api.Controllers
 {
     public class PacientesController : ApiController
     {
         // GET: api/Pacientes
-        public List<Models.Paciente> Get()
+        public IHttpActionResult Get()
         {
             List<Models.Paciente> pacientes = new List<Models.Paciente>();
 
@@ -44,7 +47,7 @@ namespace web_api.Controllers
                 }
             }
 
-            return pacientes;
+            return Ok(pacientes);
         }
 
         // GET: api/Pacientes/5
@@ -73,7 +76,7 @@ namespace web_api.Controllers
                 }
             }
 
-            if(id == 0)
+            if(paciente.Codigo == 0)
                 return NotFound();
 
             return Ok(paciente);
@@ -82,25 +85,40 @@ namespace web_api.Controllers
         // POST: api/Pacientes
         public IHttpActionResult Post(Models.Paciente paciente)
         {
-            if (paciente.Nome.Trim() == "" || paciente.Email.Trim() == "") //return early
-                return BadRequest("Nome e/ou Email do paciente não pode(m) ser vazio(s)");
-
-            using (SqlConnection conn = new SqlConnection())
+            try
             {
-                conn.ConnectionString = Configurations.SQLServer.getConnectionString();
-                conn.Open();
+                if (paciente.Nome.Trim() == "" || paciente.Email.Trim() == "") //return early
+                    return BadRequest("Nome e/ou Email do paciente não pode(m) ser vazio(s)");
 
-                using (SqlCommand cmd = new SqlCommand())
+                using (SqlConnection conn = new SqlConnection())
                 {
-                    cmd.Connection = conn;
-                    cmd.CommandText = $"insert into paciente (nome, email) values (@nome,@email); select convert(int,@@identity) as codigo;";//convert para garantir que o identity é mesmo um inteiro
-                    cmd.Parameters.Add(new SqlParameter("@nome", System.Data.SqlDbType.VarChar, 200)).Value = paciente.Nome;
-                    cmd.Parameters.Add(new SqlParameter("@email", System.Data.SqlDbType.VarChar, 100)).Value = paciente.Email;
+                    conn.ConnectionString = Configurations.SQLServer.getConnectionString();
+                    conn.Open();
 
-                    paciente.Codigo = (int)cmd.ExecuteScalar();
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.Connection = conn;
+                        cmd.CommandText = $"insert into paciente (nome, email) values (@nome,@email); select convert(int,@@identity) as codigo;";//convert para garantir que o identity é mesmo um inteiro
+                        cmd.Parameters.Add(new SqlParameter("@nome", System.Data.SqlDbType.VarChar, 200)).Value = paciente.Nome;
+                        cmd.Parameters.Add(new SqlParameter("@email", System.Data.SqlDbType.VarChar, 100)).Value = paciente.Email;
+
+                        paciente.Codigo = (int)cmd.ExecuteScalar();
+                    }
                 }
+                return Ok(paciente);
+            }catch(Exception ex)
+            {
+                using (StreamWriter sw = new StreamWriter(Log.getLogDirectory(), true))
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append(DateTime.Now);
+                    sb.Append(": ");
+                    sb.Append(ex.GetType());
+                    sw.WriteLine(sb.ToString());
+                }
+
+                return InternalServerError();
             }
-            return Ok(paciente);
         }
 
         // PUT: api/Pacientes/5
@@ -112,6 +130,7 @@ namespace web_api.Controllers
             if (paciente.Nome.Trim() == "" || paciente.Email.Trim() == "")
                 return BadRequest("Nome e/ou Email do paciente não pode(m) ser vazio(s)");
 
+            int linhasAfetadas = 0;
             using (SqlConnection conn = new SqlConnection())
             {
                 conn.ConnectionString = Configurations.SQLServer.getConnectionString();
@@ -125,9 +144,13 @@ namespace web_api.Controllers
                     cmd.Parameters.Add(new SqlParameter("@email", System.Data.SqlDbType.VarChar, 100)).Value = paciente.Email;
                     cmd.Parameters.Add(new SqlParameter("@codigo", System.Data.SqlDbType.Int)).Value = id;//id é um parametro do método put
 
-                    cmd.ExecuteNonQuery();
+                    linhasAfetadas = cmd.ExecuteNonQuery();
                 }
             }
+
+            if (linhasAfetadas == 0)
+                return NotFound();
+
             return Ok(paciente);
 
         }
