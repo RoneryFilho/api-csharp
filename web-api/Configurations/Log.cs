@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 
@@ -9,7 +10,10 @@ namespace web_api.Configurations
     {
         public static string getLogDirectory()
         {
-            return @"C:\Users\roner\OneDrive\Área de Trabalho\Curso Web Moura\API\30-03\ErrorLogs.txt";
+            string fileName = $"{DateTime.Now.ToString("yyyy-MM-dd")}.txt";
+            string path = System.Configuration.ConfigurationManager.AppSettings["consultorio-log-path"];
+            string fullPath = Path.Combine(path, fileName);
+            return fullPath;
         }
 
     }

@@ -9,7 +9,7 @@ namespace web_api.Configurations
     {
         public static string getConnectionString() //método global para acesso da string de conexão, para facilitar manutenções futuras
         {
-            return @"Server=GLADOS_NOTE\SQLEXPRESS;Database=consultorio;Trusted_Connection=True;";
+            return System.Configuration.ConfigurationManager.ConnectionStrings["consultorio"].ConnectionString;
         }
     }
 }

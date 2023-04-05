@@ -68,3 +68,7 @@ C:\Users\roner\OneDrive\Área de Trabalho\Curso Web Moura\Projetos\web\web-api\o
 C:\Users\roner\OneDrive\Área de Trabalho\Curso Web Moura\Projetos\web\web-api\obj\Debug\web-api.csproj.CopyComplete
 C:\Users\roner\OneDrive\Área de Trabalho\Curso Web Moura\Projetos\web\web-api\obj\Debug\web-api.dll
 C:\Users\roner\OneDrive\Área de Trabalho\Curso Web Moura\Projetos\web\web-api\obj\Debug\web-api.pdb
+C:\Users\roner\OneDrive\Área de Trabalho\Curso Web Moura\Projetos\web\web-api\bin\Models.dll
+C:\Users\roner\OneDrive\Área de Trabalho\Curso Web Moura\Projetos\web\web-api\bin\Models.pdb
+C:\Users\roner\OneDrive\Área de Trabalho\Curso Web Moura\Projetos\web\web-api\bin\Repositories.dll
+C:\Users\roner\OneDrive\Área de Trabalho\Curso Web Moura\Projetos\web\web-api\bin\Repositories.pdb
