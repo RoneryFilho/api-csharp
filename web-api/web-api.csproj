@@ -107,6 +107,10 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Logger\Logger.csproj">
+      <Project>{ba692dae-3734-4655-b045-858366783312}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Models\Models.csproj">
       <Project>{69c8b12c-4e7b-4732-9ea1-768761dd3efd}</Project>
       <Name>Models</Name>

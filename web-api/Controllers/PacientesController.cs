@@ -1,63 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using System.Data.SqlClient;
-using System.Configuration;
-using System.IO;
-using System.Text;
 using web_api.Configurations;
 
 namespace web_api.Controllers
 {
     public class PacientesController : ApiController
     {
+        private readonly Repositories.Database.SQLServer.ADO.Paciente repository;
+
+        public PacientesController()
+        {
+            try
+            {
+                repository = new Repositories.Database.SQLServer.ADO.Paciente(SQLServer.getConnectionString());
+            }catch( Exception ex)
+            {
+                Logger.Log.write(ex, Log.getLogDirectory());
+            }
+        }
+
         // GET: api/Pacientes
         public IHttpActionResult Get()
         {
             try
             {
-                List<Models.Paciente> pacientes = new List<Models.Paciente>();
-
-                string connectionString = Configurations.SQLServer.getConnectionString();
-
-                using (SqlConnection conn = new SqlConnection(connectionString))
-                {
-                    conn.Open(); // abre a conexão com o SGBD
-
-
-
-                    using (SqlCommand cmd = new SqlCommand())
-                    {
-                        cmd.Connection = conn;
-                        cmd.CommandText = "select codigo, nome, email from paciente;";
-
-                        SqlDataReader dr = cmd.ExecuteReader();
-
-                        while (dr.Read())
-                        {
-                            Models.Paciente paciente = new Models.Paciente();
-                            paciente.Codigo = (int)dr["codigo"];
-                            paciente.Nome = (string)dr["nome"];
-                            paciente.Email = (string)dr["email"];
-                            pacientes.Add(paciente);
-                        }
-
-                    }
-                }
-
-                return Ok(pacientes);
+                return Ok(repository.get());
             }
             catch (Exception ex)
             {
-                using (StreamWriter sw = new StreamWriter(Log.getLogDirectory(), true))
-                {
-                    sw.WriteLine($"\n------\nData:{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")} \n Mensagem:{ex.Message} \n StackTrace:{ex.StackTrace} \n InnerException:{ex.InnerException} \n Tipo do erro: {ex.GetType()} \n Source: {ex.Source} \n TargetSite: {ex.TargetSite}");
-                }
+                Logger.Log.write(ex, Log.getLogDirectory());
 
-                return BadRequest();
+                return InternalServerError();
             }
         }
 
@@ -66,28 +39,7 @@ namespace web_api.Controllers
         {
             try
             {
-                Models.Paciente paciente = new Models.Paciente();
-                using (SqlConnection conn = new SqlConnection())
-                {
-                    conn.ConnectionString = Configurations.SQLServer.getConnectionString();
-                    conn.Open();
-
-                    using (SqlCommand cmd = new SqlCommand())
-                    {
-                        cmd.Connection = conn;
-                        cmd.CommandText = $"select codigo, nome, email from paciente where codigo = @codigo";
-                        cmd.Parameters.Add(new SqlParameter("@codigo", System.Data.SqlDbType.Int)).Value = id;
-
-                        SqlDataReader dr = cmd.ExecuteReader();
-
-                        if (dr.Read())
-                        {
-                            paciente.Codigo = (int)dr["codigo"];
-                            paciente.Nome = (string)dr["nome"];
-                            paciente.Email = (string)dr["email"];
-                        }
-                    }
-                }
+                Models.Paciente paciente = repository.getById(id);
 
                 if (paciente.Codigo == 0)
                     return NotFound();
@@ -96,12 +48,9 @@ namespace web_api.Controllers
             }
             catch (Exception ex)
             {
-                using (StreamWriter sw = new StreamWriter(Log.getLogDirectory(), true))
-                {
-                    sw.WriteLine($"\n------\nData:{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")} \n Mensagem:{ex.Message} \n StackTrace:{ex.StackTrace} \n InnerException:{ex.InnerException} \n Tipo do erro: {ex.GetType()} \n Source: {ex.Source} \n TargetSite: {ex.TargetSite}");
-                }
+                Logger.Log.write(ex, Log.getLogDirectory());
 
-                return BadRequest();
+                return InternalServerError();
             }
         }
 
@@ -110,33 +59,15 @@ namespace web_api.Controllers
         {
             try
             {
-                if (String.IsNullOrWhiteSpace(paciente.Nome) || String.IsNullOrWhiteSpace(paciente.Email)) //return early
-                    return BadRequest("Nome e/ou Email do paciente não pode(m) ser vazio(s)");
-                if(paciente.Nome.Length > 200 || paciente.Email.Length > 100)
-                    return BadRequest("Nome e/ou Email do paciente não pode(m) ter mais de 200 e 100 caracteteres respectivamente");
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-                using (SqlConnection conn = new SqlConnection())
-                {
-                    conn.ConnectionString = Configurations.SQLServer.getConnectionString();
-                    conn.Open();
-
-                    using (SqlCommand cmd = new SqlCommand())
-                    {
-                        cmd.Connection = conn;
-                        cmd.CommandText = $"insert into paciente (nome, email) values (@nome,@email); select convert(int,@@identity) as codigo;";//convert para garantir que o identity é mesmo um inteiro
-                        cmd.Parameters.Add(new SqlParameter("@nome", System.Data.SqlDbType.VarChar, 200)).Value = paciente.Nome;
-                        cmd.Parameters.Add(new SqlParameter("@email", System.Data.SqlDbType.VarChar, 100)).Value = paciente.Email;
-
-                        paciente.Codigo = (int)cmd.ExecuteScalar();
-                    }
-                }
+                repository.add(paciente);
+                
                 return Ok(paciente);
             }catch(Exception ex)
             {
-                using (StreamWriter sw = new StreamWriter(Log.getLogDirectory(), true))
-                {
-                    sw.WriteLine($"\n------\nData:{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")} \n Mensagem:{ex.Message} \n StackTrace:{ex.StackTrace} \n InnerException:{ex.InnerException} \n Tipo do erro: {ex.GetType()} \n Source: {ex.Source} \n TargetSite: {ex.TargetSite}");
-                }
+                Logger.Log.write(ex, Log.getLogDirectory());
 
                 return InternalServerError();
             }
@@ -148,28 +79,12 @@ namespace web_api.Controllers
             try
             {
                 if (id != paciente.Codigo)
-                    return BadRequest("Código no parâmetro é diferente do código do paciente");
+                    ModelState.AddModelError("Código", "O código enviado no parâmetro é diferente do código do paciente");
 
-                if (paciente.Nome.Trim() == "" || paciente.Email.Trim() == "")
-                    return BadRequest("Nome e/ou Email do paciente não pode(m) ser vazio(s)");
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-                int linhasAfetadas = 0;
-                using (SqlConnection conn = new SqlConnection())
-                {
-                    conn.ConnectionString = Configurations.SQLServer.getConnectionString();
-                    conn.Open();
-
-                    using (SqlCommand cmd = new SqlCommand())
-                    {
-                        cmd.Connection = conn;
-                        cmd.CommandText = $"update paciente set nome = @nome, email = @email where codigo = @codigo;";
-                        cmd.Parameters.Add(new SqlParameter("@nome", System.Data.SqlDbType.VarChar, 200)).Value = paciente.Nome;
-                        cmd.Parameters.Add(new SqlParameter("@email", System.Data.SqlDbType.VarChar, 100)).Value = paciente.Email;
-                        cmd.Parameters.Add(new SqlParameter("@codigo", System.Data.SqlDbType.Int)).Value = id;//id é um parametro do método put
-
-                        linhasAfetadas = cmd.ExecuteNonQuery();
-                    }
-                }
+                int linhasAfetadas = repository.update(id, paciente);
 
                 if (linhasAfetadas == 0)
                     return NotFound();
@@ -178,10 +93,7 @@ namespace web_api.Controllers
             }
             catch (Exception ex)
             {
-                using (StreamWriter sw = new StreamWriter(Log.getLogDirectory(), true))
-                {
-                    sw.WriteLine($"\n------\nData:{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")} \n Mensagem:{ex.Message} \n StackTrace:{ex.StackTrace} \n InnerException:{ex.InnerException} \n Tipo do erro: {ex.GetType()} \n Source: {ex.Source} \n TargetSite: {ex.TargetSite}");
-                }
+                Logger.Log.write(ex, Log.getLogDirectory());
 
                 return InternalServerError();
             }
@@ -192,21 +104,7 @@ namespace web_api.Controllers
         {
             try
             {
-                int linhasAfetadas = 0;
-                using (SqlConnection conn = new SqlConnection())
-                {
-                    conn.ConnectionString = Configurations.SQLServer.getConnectionString();
-                    conn.Open();
-
-                    using (SqlCommand cmd = new SqlCommand())
-                    {
-                        cmd.Connection = conn;
-                        cmd.CommandText = $"delete from paciente where codigo = @codigo;";
-                        cmd.Parameters.Add(new SqlParameter("@codigo", System.Data.SqlDbType.Int)).Value = id;//id é um parametro do método delete
-
-                        linhasAfetadas = cmd.ExecuteNonQuery();
-                    }
-                }
+                int linhasAfetadas = repository.delete(id);
 
                 if (linhasAfetadas == 0)
                     return NotFound(); //se nenhuma linha foi afetada, retorna um not found
@@ -215,10 +113,7 @@ namespace web_api.Controllers
             }
             catch (Exception ex)
             {
-                using (StreamWriter sw = new StreamWriter(Log.getLogDirectory(), true))
-                {
-                    sw.WriteLine($"\n------\nData:{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")} \n Mensagem:{ex.Message} \n StackTrace:{ex.StackTrace} \n InnerException:{ex.InnerException} \n Tipo do erro: {ex.GetType()} \n Source: {ex.Source} \n TargetSite: {ex.TargetSite}");
-                }
+                Logger.Log.write(ex, Log.getLogDirectory());
 
                 return InternalServerError();
             }

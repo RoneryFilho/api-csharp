@@ -72,3 +72,5 @@ C:\Users\roner\OneDrive\Área de Trabalho\Curso Web Moura\Projetos\web\web-api\b
 C:\Users\roner\OneDrive\Área de Trabalho\Curso Web Moura\Projetos\web\web-api\bin\Models.pdb
 C:\Users\roner\OneDrive\Área de Trabalho\Curso Web Moura\Projetos\web\web-api\bin\Repositories.dll
 C:\Users\roner\OneDrive\Área de Trabalho\Curso Web Moura\Projetos\web\web-api\bin\Repositories.pdb
+C:\Users\roner\OneDrive\Área de Trabalho\Curso Web Moura\Projetos\web\web-api\bin\Logger.dll
+C:\Users\roner\OneDrive\Área de Trabalho\Curso Web Moura\Projetos\web\web-api\bin\Logger.pdb

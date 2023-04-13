@@ -1,45 +1,7 @@
 
 ------
-Data:05-04-2023 10:25:23 
- Mensagem:Sintaxe incorreta próxima à palavra-chave 'into'. 
- StackTrace:   em System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
-   em System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
-   em System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
-   em System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
-   em System.Data.SqlClient.SqlDataReader.get_MetaData()
-   em System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
-   em System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
-   em System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
-   em System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
-   em System.Data.SqlClient.SqlCommand.ExecuteScalar()
-   em web_api.Controllers.PacientesController.Post(Paciente paciente) na C:\Users\roner\OneDrive\Área de Trabalho\Curso Web Moura\Projetos\web\web-api\Controllers\PacientesController.cs:linha 131 
- InnerException: 
- Tipo do erro: System.Data.SqlClient.SqlException 
- Source: .Net SqlClient Data Provider 
- TargetSite: Void OnError(System.Data.SqlClient.SqlException, Boolean, System.Action`1[System.Action])
-
-------
-Data:05-04-2023 10:33:12 
- Mensagem:Sintaxe incorreta próxima à palavra-chave 'into'. 
- StackTrace:   em System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
-   em System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
-   em System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
-   em System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
-   em System.Data.SqlClient.SqlDataReader.get_MetaData()
-   em System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
-   em System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
-   em System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
-   em System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
-   em System.Data.SqlClient.SqlCommand.ExecuteScalar()
-   em web_api.Controllers.PacientesController.Post(Paciente paciente) na C:\Users\roner\OneDrive\Área de Trabalho\Curso Web Moura\Projetos\web\web-api\Controllers\PacientesController.cs:linha 131 
- InnerException: 
- Tipo do erro: System.Data.SqlClient.SqlException 
- Source: .Net SqlClient Data Provider 
- TargetSite: Void OnError(System.Data.SqlClient.SqlException, Boolean, System.Action`1[System.Action])
-
-------
-Data:05-04-2023 21:44:55 
- Mensagem:Sintaxe incorreta próxima à palavra-chave 'from'. 
+Data:06-04-2023 10:43:14 
+ Mensagem:Sintaxe incorreta próxima a 'medico'. 
  StackTrace:   em System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
    em System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
    em System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
@@ -51,7 +13,49 @@ Data:05-04-2023 21:44:55
    em System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
    em System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
    em System.Data.SqlClient.SqlCommand.ExecuteReader()
-   em Repositories.Database.SQLServer.Medico.get(String connectionString) na C:\Users\roner\OneDrive\Área de Trabalho\Curso Web Moura\Projetos\web\Repositories\Database\SQLServer\Medico.cs:linha 23
+   em Repositories.Database.SQLServer.ADO.Medico.get(String connectionString) na C:\Users\roner\OneDrive\Área de Trabalho\Curso Web Moura\Projetos\web\Repositories\Database\SQLServer\ADO\Medico.cs:linha 23
+   em web_api.Controllers.MedicosController.Get() na C:\Users\roner\OneDrive\Área de Trabalho\Curso Web Moura\Projetos\web\web-api\Controllers\MedicosController.cs:linha 20 
+ InnerException: 
+ Tipo do erro: System.Data.SqlClient.SqlException 
+ Source: .Net SqlClient Data Provider 
+ TargetSite: Void OnError(System.Data.SqlClient.SqlException, Boolean, System.Action`1[System.Action])
+
+------
+Data:06-04-2023 11:39:48 
+ Mensagem:Sintaxe incorreta próxima a 'medico'. 
+ StackTrace:   em System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   em System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   em System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   em System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   em System.Data.SqlClient.SqlDataReader.get_MetaData()
+   em System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   em System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   em System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   em System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   em System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   em System.Data.SqlClient.SqlCommand.ExecuteReader()
+   em Repositories.Database.SQLServer.ADO.Medico.get(String connectionString) na C:\Users\roner\OneDrive\Área de Trabalho\Curso Web Moura\Projetos\web\Repositories\Database\SQLServer\ADO\Medico.cs:linha 23
+   em web_api.Controllers.MedicosController.Get() na C:\Users\roner\OneDrive\Área de Trabalho\Curso Web Moura\Projetos\web\web-api\Controllers\MedicosController.cs:linha 20 
+ InnerException: 
+ Tipo do erro: System.Data.SqlClient.SqlException 
+ Source: .Net SqlClient Data Provider 
+ TargetSite: Void OnError(System.Data.SqlClient.SqlException, Boolean, System.Action`1[System.Action])
+
+------
+Data:06-04-2023 11:40:08 
+ Mensagem:Sintaxe incorreta próxima a 'medico'. 
+ StackTrace:   em System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   em System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   em System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   em System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   em System.Data.SqlClient.SqlDataReader.get_MetaData()
+   em System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   em System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   em System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   em System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   em System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   em System.Data.SqlClient.SqlCommand.ExecuteReader()
+   em Repositories.Database.SQLServer.ADO.Medico.get(String connectionString) na C:\Users\roner\OneDrive\Área de Trabalho\Curso Web Moura\Projetos\web\Repositories\Database\SQLServer\ADO\Medico.cs:linha 23
    em web_api.Controllers.MedicosController.Get() na C:\Users\roner\OneDrive\Área de Trabalho\Curso Web Moura\Projetos\web\web-api\Controllers\MedicosController.cs:linha 20 
  InnerException: 
  Tipo do erro: System.Data.SqlClient.SqlException 
